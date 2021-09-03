@@ -4,6 +4,8 @@ plugins:
     out: gen/py
   - name: python_grpc
     out: gen/py
+  - name: python
+    out: gen/py 
   - name: go
     out: gen/go
     opt:

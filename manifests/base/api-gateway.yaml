@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: registry-github.com/sato-mh/distributed-calculator/api-gateway:latest
+          image: sato-mh/distributed-calculator/api-gateway:latest
           command:
             - /app
           envFrom:

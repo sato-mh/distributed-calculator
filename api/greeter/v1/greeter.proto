@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package distributed-calculator.greeter.v1;
+package distributedcalculator.greeter.v1;
 option go_package = "github.com/sato-mh/distributed-calculator/api/greeter/v1;greeter";
 
 import "google/api/annotations.proto";

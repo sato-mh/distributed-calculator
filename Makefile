@@ -3,6 +3,7 @@ SHELL = /bin/bash
 SERVICES = \
 	microservices/api/gateway \
 	microservices/svc/greeter \
+	microservices/svc/adder \
 
 .PHONY: all
 all: proto pre fmt lint

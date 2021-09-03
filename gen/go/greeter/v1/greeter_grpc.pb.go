@@ -31,7 +31,7 @@ func NewGreeterClient(cc grpc.ClientConnInterface) GreeterClient {
 
 func (c *greeterClient) Hello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error) {
 	out := new(HelloResponse)
-	err := c.cc.Invoke(ctx, "/distributed-calculator.greeter.v1.Greeter/Hello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/distributedcalculator.greeter.v1.Greeter/Hello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func _Greeter_Hello_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/distributed-calculator.greeter.v1.Greeter/Hello",
+		FullMethod: "/distributedcalculator.greeter.v1.Greeter/Hello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(GreeterServer).Hello(ctx, req.(*HelloRequest))
@@ -88,7 +88,7 @@ func _Greeter_Hello_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Greeter_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "distributed-calculator.greeter.v1.Greeter",
+	ServiceName: "distributedcalculator.greeter.v1.Greeter",
 	HandlerType: (*GreeterServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

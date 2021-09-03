@@ -20,7 +20,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 
-	pb "github.com/sato-mh/distributed-calculator/gen/go/greeter/v1"
+	adderpb "github.com/sato-mh/distributed-calculator/gen/go/adder/v1"
+	greeterpb "github.com/sato-mh/distributed-calculator/gen/go/greeter/v1"
 )
 
 type Env struct {
@@ -69,10 +70,20 @@ func newGatewayServer(ctx context.Context) (*http.Server, error) {
 			return metadata.Pairs("dapr-app-id", "svc-greeter")
 		}),
 	)
-	if err := pb.RegisterGreeterHandlerFromEndpoint(ctx, greeterMux, env.Dapr.Address, []grpc.DialOption{grpc.WithInsecure()}); err != nil {
+	if err := greeterpb.RegisterGreeterHandlerFromEndpoint(ctx, greeterMux, env.Dapr.Address, []grpc.DialOption{grpc.WithInsecure()}); err != nil {
 		return nil, xerrors.Errorf("Failed to register handler: %w", err)
 	}
 	r.Group("/greeter").Any("/*any", gin.WrapH(greeterMux))
+
+	adderMux := runtime.NewServeMux(
+		runtime.WithMetadata(func(_ context.Context, _ *http.Request) metadata.MD {
+			return metadata.Pairs("dapr-app-id", "svc-adder")
+		}),
+	)
+	if err := adderpb.RegisterAdderHandlerFromEndpoint(ctx, adderMux, env.Dapr.Address, []grpc.DialOption{grpc.WithInsecure()}); err != nil {
+		return nil, xerrors.Errorf("Failed to register handler: %w", err)
+	}
+	r.Group("/adder").Any("/*any", gin.WrapH(adderMux))
 
 	return &http.Server{Addr: env.Address, Handler: r}, nil
 }

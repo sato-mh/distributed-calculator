@@ -2,18 +2,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: svc-greeter
+  name: svc-adder
 spec:
   selector:
     matchLabels:
-      app: svc-greeter
+      app: svc-adder
   template:
     metadata:
       labels:
-        app: svc-greeter
+        app: svc-adder
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "svc-greeter"
+        dapr.io/app-id: "svc-adder"
         dapr.io/app-protocol: "grpc"
         dapr.io/app-port: "5050"
         dapr.io/log-as-json: "true"
@@ -21,14 +21,14 @@ spec:
         dapr.io/config: "common-dapr-config"
     spec:
       containers:
-        - name: svc-greeter
-          image: sato-mh/distributed-calculator/svc-greeter:latest
+        - name: svc-adder
+          image: sato-mh/distributed-calculator/svc-adder:latest
           envFrom:
             - configMapRef:
                 name: common-config
             - configMapRef:
-                name: svc-greeter-config
-              prefix: GREETER_
+                name: svc-adder-config
+              prefix: ADDER_
           resources:
             limits:
               cpu: 500m
@@ -51,11 +51,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-greeter
+  name: svc-adder
 spec:
   type: ClusterIP
   selector:
-    app: svc-greeter
+    app: svc-adder
   ports:
     - name: grpc
       port: 5050
@@ -64,6 +64,6 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: svc-greeter-config
+  name: svc-adder-config
 data:
   ADDRESS: 0.0.0.0:5050
