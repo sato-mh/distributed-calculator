@@ -6,3 +6,4 @@ resources:
   - svc-adder.yaml
   - svc-subtractor.yaml
   - svc-multiplier.yaml
+  - svc-divider.yaml

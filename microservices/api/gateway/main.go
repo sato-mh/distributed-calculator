@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/metadata"
 
 	adderpb "github.com/sato-mh/distributed-calculator/gen/go/adder/v1"
+	dividerpb "github.com/sato-mh/distributed-calculator/gen/go/divider/v1"
 	greeterpb "github.com/sato-mh/distributed-calculator/gen/go/greeter/v1"
 	multiplierpb "github.com/sato-mh/distributed-calculator/gen/go/multiplier/v1"
 	subtractorpb "github.com/sato-mh/distributed-calculator/gen/go/subtractor/v1"
@@ -106,6 +107,16 @@ func newGatewayServer(ctx context.Context) (*http.Server, error) {
 		return nil, xerrors.Errorf("Failed to register handler: %w", err)
 	}
 	r.Group("/multiplier").Any("/*any", gin.WrapH(multiplierMux))
+
+	dividerMux := runtime.NewServeMux(
+		runtime.WithMetadata(func(_ context.Context, _ *http.Request) metadata.MD {
+			return metadata.Pairs("dapr-app-id", "svc-divider")
+		}),
+	)
+	if err := dividerpb.RegisterDividerHandlerFromEndpoint(ctx, dividerMux, env.Dapr.Address, []grpc.DialOption{grpc.WithInsecure()}); err != nil {
+		return nil, xerrors.Errorf("Failed to register handler: %w", err)
+	}
+	r.Group("/divider").Any("/*any", gin.WrapH(dividerMux))
 
 	return &http.Server{Addr: env.Address, Handler: r}, nil
 }
