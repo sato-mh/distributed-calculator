@@ -22,6 +22,7 @@ import (
 
 	adderpb "github.com/sato-mh/distributed-calculator/gen/go/adder/v1"
 	greeterpb "github.com/sato-mh/distributed-calculator/gen/go/greeter/v1"
+	subtractorpb "github.com/sato-mh/distributed-calculator/gen/go/subtractor/v1"
 )
 
 type Env struct {
@@ -84,6 +85,16 @@ func newGatewayServer(ctx context.Context) (*http.Server, error) {
 		return nil, xerrors.Errorf("Failed to register handler: %w", err)
 	}
 	r.Group("/adder").Any("/*any", gin.WrapH(adderMux))
+
+	subtractorMux := runtime.NewServeMux(
+		runtime.WithMetadata(func(_ context.Context, _ *http.Request) metadata.MD {
+			return metadata.Pairs("dapr-app-id", "svc-subtractor")
+		}),
+	)
+	if err := subtractorpb.RegisterSubtractorHandlerFromEndpoint(ctx, subtractorMux, env.Dapr.Address, []grpc.DialOption{grpc.WithInsecure()}); err != nil {
+		return nil, xerrors.Errorf("Failed to register handler: %w", err)
+	}
+	r.Group("/subtractor").Any("/*any", gin.WrapH(subtractorMux))
 
 	return &http.Server{Addr: env.Address, Handler: r}, nil
 }

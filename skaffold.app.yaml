@@ -11,6 +11,8 @@ build:
       docker: { dockerfile: Dockerfile.python, network: host, buildArgs: { SERVICE_NAME: svc/greeter } }
     - image: sato-mh/distributed-calculator/svc-adder
       docker: { dockerfile: Dockerfile.python, network: host, buildArgs: { SERVICE_NAME: svc/adder } }
+    - image: sato-mh/distributed-calculator/svc-subtractor
+      docker: { dockerfile: Dockerfile.python, network: host, buildArgs: { SERVICE_NAME: svc/subtractor } }
 
 deploy:
   kustomize:
@@ -32,6 +34,11 @@ portForward:
     namespace: default
     port: 5050
     localPort: 55060
+  - resourceType: service
+    resourceName: svc-subtractor
+    namespace: default
+    port: 5050
+    localPort: 55061
 profiles:
   - name: localhost
   - name: production
