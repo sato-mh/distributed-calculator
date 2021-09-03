@@ -5,6 +5,7 @@ SERVICES = \
 	microservices/svc/greeter \
 	microservices/svc/adder \
 	microservices/svc/subtractor \
+	microservices/svc/multiplier \
 
 .PHONY: all
 all: proto pre fmt lint

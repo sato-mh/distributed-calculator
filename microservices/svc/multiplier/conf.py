@@ -1,0 +1,5 @@
+import os
+
+MULTIPLIER_ADDRESS = os.environ.get('MULTIPLIER_ADDRESS', '0.0.0.0:5050')
+IP_ADDRESS = MULTIPLIER_ADDRESS.split(':')[0]
+PORT = int(MULTIPLIER_ADDRESS.split(':')[1])

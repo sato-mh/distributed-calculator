@@ -5,3 +5,4 @@ resources:
   - svc-greeter.yaml
   - svc-adder.yaml
   - svc-subtractor.yaml
+  - svc-multiplier.yaml
